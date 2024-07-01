@@ -85,7 +85,7 @@ prompt.get([{
 }], function (err, result) {
   //console.log('  version: ' + result.version);
   if (result.version === 'y' || result.version === 'Y') {
-    execProgram("npm version patch");
+    execProgram("npm version patch --no-git-tag-version");
     if (lastExitCode) return;
   }
   // spawnProgram(this.tStart);
