@@ -8,7 +8,7 @@ const http_1 = __importDefault(require("http"));
 const fs_1 = __importDefault(require("fs"));
 const version_1 = require("./version");
 //definitiion of requests and responses
-let tMockDataArr;
+let tMockData;
 //#1 read config
 let tPort = 3000;
 let tMockFile = 'mock.json';
@@ -46,32 +46,30 @@ fs_1.default.readFile(tMockFile, "utf8", (error, data) => {
         console.log(error);
         return;
     }
-    tMockDataArr = JSON.parse(data);
+    tMockData = JSON.parse(data);
 });
 const server = http_1.default.createServer((request, response) => {
     // console.dir(request.params);
     //console.log(request)
     //http://localhost:3000/test
     var _a;
+    console.log('request:' + request.method + " " + request.url);
     //!Preskoci favicon ***************************************
-    if (((_a = request.url) === null || _a === void 0 ? void 0 : _a.indexOf('/favicon.ico')) !== -1) {
+    if (((_a = request.url) === null || _a === void 0 ? void 0 : _a.indexOf('favicon.ico')) !== -1) {
         const filePath = "favicon.ico";
         //Da li imamo favico
-        fs_1.default.exists(filePath, function (exists) {
-            if (!exists) {
-                response.end();
-                return;
-            }
-        });
+        if (!fs_1.default.existsSync(filePath)) {
+            response.end();
+            return;
+        }
         response.writeHead(200, { 'Content-Type': 'image/x-icon' });
         fs_1.default.createReadStream(filePath).pipe(response);
         return;
     }
     //Preskoci favicon ***************************************
-    console.log('request:' + request.method + " " + request.url);
     let tMatchedItem;
     //! MATCH REQUEST DINAMICALY *************************+
-    tMockDataArr.some((element) => {
+    tMockData.mappings.some((element) => {
         var _a, _b;
         //Razboj podatke na method i url
         const tItems = element.request.split(" ");

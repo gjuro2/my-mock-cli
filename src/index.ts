@@ -3,15 +3,15 @@
 import http, { IncomingMessage, ServerResponse } from 'http';
 import fs from 'fs';
 import { version, name } from './version';
-import { MyMockData } from './my-mock-data';
+import { MyMockDataRow } from './my-mock-data';
 
 //definitiion of requests and responses
-let tMockDataArr: any;
+let tMockData: any;
 
 //#1 read config
 let tPort = 3000;
 let tMockFile = 'mock.json';
- 
+
 //Dir u kojem se trenutno sve izvršava
 let tWorkDir ///home/dev/xoffice/my-mock-cli
 
@@ -25,19 +25,19 @@ process.argv.forEach(function (val, index, array) {
     //let tWorkDir ///home/dev/xoffice/my-mock-cli
     if (index == 0) {
         tWorkDir = val;
-        console.log("WORK_DIR: "+tWorkDir);
+        console.log("WORK_DIR: " + tWorkDir);
         return;
     }
 
     //let tBinDir ///home/admin1/.nvm/versions/node/v16.19.1/bin/node
     if (index == 1) {
         tBinDir = val;
-        console.log("BIN_DIR : "+tBinDir);
+        console.log("BIN_DIR : " + tBinDir);
         return;
     }
     if (val.indexOf("--port") != -1) {
         tPort = parseInt(val.replace("--port=", ""), 10);
-        console.log("PORT    : "+tPort);
+        console.log("PORT    : " + tPort);
 
         return;
     }
@@ -45,13 +45,13 @@ process.argv.forEach(function (val, index, array) {
     tMockFile = val;
 });
 
-console.log("MOCK    : "+tMockFile);
+console.log("MOCK    : " + tMockFile);
 fs.readFile(tMockFile, "utf8", (error: any, data: any) => {
     if (error) {
         console.log(error);
         return;
     }
-    tMockDataArr = JSON.parse(data);
+    tMockData = JSON.parse(data);
 });
 
 const server = http.createServer((request: IncomingMessage, response: ServerResponse) => {
@@ -59,16 +59,15 @@ const server = http.createServer((request: IncomingMessage, response: ServerResp
     //console.log(request)
     //http://localhost:3000/test
 
+    console.log('request:' + request.method + " " + request.url);
     //!Preskoci favicon ***************************************
-    if (request.url?.indexOf('/favicon.ico') !== -1) {
+    if (request.url?.indexOf('favicon.ico') !== -1) {
         const filePath = "favicon.ico";
         //Da li imamo favico
-        fs.exists(filePath, function (exists) {
-            if (!exists) {
-                response.end();
-                return;
-            }
-        });
+        if (!fs.existsSync(filePath)) {
+            response.end();
+            return;
+        }
 
         response.writeHead(200, { 'Content-Type': 'image/x-icon' });
         fs.createReadStream(filePath).pipe(response);
@@ -76,11 +75,10 @@ const server = http.createServer((request: IncomingMessage, response: ServerResp
     }
     //Preskoci favicon ***************************************
 
-    console.log('request:' + request.method+" "+request.url);
-    let tMatchedItem: MyMockData | any;
+    let tMatchedItem: MyMockDataRow | any;
 
     //! MATCH REQUEST DINAMICALY *************************+
-    tMockDataArr.some((element: MyMockData) => {
+    tMockData.mappings.some((element: MyMockDataRow) => {
 
         //Razboj podatke na method i url
         const tItems = element.request.split(" ");
@@ -98,8 +96,8 @@ const server = http.createServer((request: IncomingMessage, response: ServerResp
         // console.log('check URL:' + tUrl);
         if (tUrl.indexOf("*") !== -1) {
             //*REGEX
-            const tRegex =tUrl.replaceAll("*", ".*");
-            if (!request.url?.match(tRegex+"$"))  return false;
+            const tRegex = tUrl.replaceAll("*", ".*");
+            if (!request.url?.match(tRegex + "$")) return false;
         } else {
             //* NORMALAN
             if (!request.url?.startsWith(tUrl)) return false;
@@ -117,10 +115,10 @@ const server = http.createServer((request: IncomingMessage, response: ServerResp
 
     //Logiraj poziv
     if (!tMatchedItem.title) {
-        console.log('# Matched:'+ tMatchedItem.request);
+        console.log('# Matched:' + tMatchedItem.request);
     } else {
-        console.log('# Matched:'+ tMatchedItem.title);
-        console.log('  request:'+tMatchedItem.request);
+        console.log('# Matched:' + tMatchedItem.title);
+        console.log('  request:' + tMatchedItem.request);
     }
 
     //U suprotnom vrati response
