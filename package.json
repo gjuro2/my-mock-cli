@@ -1,0 +1,31 @@
+{
+  "name": "@gjuro/my-mock-cli",
+  "version": "1.0.7",
+  "description": "Simple mock HTTP using json config",
+  "author": "Dubravko Ostoic",
+  "license": "MIT",
+  "keywords": [
+    "mock"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gjuro2/my-mock-cli"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-watch": "npx tsc --watch",
+    "build": "npx tsc"
+  },
+  "main": "bin/index.js",
+  "bin": {
+    "my-mock-cli": "./bin/index.js"
+  },
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.4",
+    "@types/node": "^20.14.9",
+    "genversion": "^3.2.0",
+    "prompt": "^1.3.0",
+    "typescript": "^5.5.2",
+    "version": "^0.1.2"
+  }
+}

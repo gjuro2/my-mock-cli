@@ -1,0 +1,73 @@
+{
+    "@t": "2024-06-12T13:51:40.9408113+02:00",
+    "@l": "INF",
+    "@scope": "HTTP_OUT",
+    "service": "GEORGE_STORE|GO(9)|hr",
+    "endpoint": "GET /prod/v1/ebc/loans/loan",
+    "ecsId": "561589",
+    "kliId": "4198330 - DENIS MIKULIĆ",
+    "corpKliId": null,
+    "requestId": "2be2d1dd2fd91",
+    "jti": "ff5f45e1-1551-45fc-b11d-b92aa7bda4c2",
+    "@resp": {
+        "HttpStatusCode": "OK",
+        "data": {
+            "id": "16000400400346",
+            "accountNo": "5123298853",
+            "durationMin": 12,
+            "durationMax": 120,
+            "amountMin": {
+                "value": 40000,
+                "precision": 2,
+                "currency": "EUR"
+            },
+            "amountMax": {
+                "value": 2000000,
+                "precision": 2,
+                "currency": "EUR"
+            },
+            "installmentMax": {
+                "value": 5479,
+                "precision": 2,
+                "currency": "EUR"
+            },
+            "principle": {
+                "value": 2000000,
+                "precision": 2,
+                "currency": "EUR"
+            },
+            "toBeDisbursed": {
+                "value": 2000000,
+                "precision": 2,
+                "currency": "EUR"
+            },
+            "toBeDisbursedDom": {
+                "value": 2000000,
+                "precision": 2,
+                "currency": "EUR"
+            },
+            "processingFee": {
+                "value": 0,
+                "precision": 2,
+                "currency": "EUR"
+            },
+            "processingFeeDom": {
+                "value": 0,
+                "precision": 2,
+                "currency": "EUR"
+            },
+            "monthlyAnnuity": {
+                "value": 38573,
+                "precision": 2,
+                "currency": "EUR"
+            },
+            "duration": 60,
+            "interestType": "FIXED_INTEREST_RATE",
+            "interestRate": 5.90,
+            "efectiveInterestRate": 6.06,
+            "email": "MIKULICDENIS5@GMAIL.COM",
+            "adjustCalculation": true
+        }
+    },
+    "@dur": "00:07.2814"
+}
