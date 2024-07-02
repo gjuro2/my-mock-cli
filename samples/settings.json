@@ -1,4 +1,8 @@
 //APP SETTINGS
 {
-    "port": 3000
+    "port": 3000,
+    "propMappings": {
+        "request": "endpoint",
+        "response": "@resp.data"
+    }
 }

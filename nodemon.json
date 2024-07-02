@@ -1,6 +1,6 @@
 {
     "watch": ["src"],
-    "ext": ".js,.ts",
+    "ext": ".js,.ts,.json",
     "ignore": [],
     "exec": "npx genversion --esm --semi --property name,version src/version.js && npx tsc"
 }

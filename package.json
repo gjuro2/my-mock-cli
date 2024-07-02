@@ -1,6 +1,6 @@
 {
   "name": "@gjuro/my-mock-cli",
-  "version": "1.0.10",
+  "version": "1.0.16",
   "description": "Simple mock HTTP using json config",
   "author": "Dubravko Ostoic",
   "license": "MIT",

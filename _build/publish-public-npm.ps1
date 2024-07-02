@@ -5,7 +5,7 @@ $tAppName ="my-mock-cli"
 $tProjectFolder = "/home/dev/xoffice/my-mock-cli"
 
 cd $tProjectFolder
-Write-Host "Publish START $tAppName"  
+Write-Host "Publish START $tAppName"
 #VERSION PROMPT *************************************************************
 node version-prompt.js
 if ( $LASTEXITCODE -ne 0 ) {
