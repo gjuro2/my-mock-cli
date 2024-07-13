@@ -1,0 +1,15 @@
+{
+    "title": "my-mock-cli external log file",
+    "log1-propMappings": {
+        "@request": "endpoint",
+        "@response.@body": "@resp.data"
+    },
+    "log2-propMappings": {
+        "@request": "@req",
+        "@response": "@resp"
+    },
+    "@endpoints": [
+        "{{m-file 'log-file1.log' log1-propMappings}}",
+        "{{m-file 'log-file2.log' log2-propMappings}}"
+    ]
+}

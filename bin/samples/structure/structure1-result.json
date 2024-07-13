@@ -1,0 +1,27 @@
+{
+    "title": "Short structure",
+    "@endpoints": [
+        {
+            "@request": {
+                "@url": "GET /api/users/1",
+                "@headers": [
+                    {
+                        "content-type": "application/json"
+                    }
+                ]
+            },
+            "@response": {
+                "@status": 200,
+                "@headers": [
+                    {
+                        "content-type": "application/json"
+                    }
+                ],
+                "@body": {
+                    "id": 1,
+                    "title": "test 1"
+                }
+            }
+        }
+    ]
+}

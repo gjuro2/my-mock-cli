@@ -1,0 +1,21 @@
+{
+    "title": "User API",
+    "global": {
+        "userTemplate": { "id": "<<{{idx}}>>", "naziv": "User {{idx}}" }
+    },
+    "@endpoints": [
+        {
+            "@request": "GET /api/users/:id",
+            "@response": {
+                "@body": "{{object global.userTemplate ':id'}}"
+            }
+        },
+        {
+            "title": "get list",
+            "@request": "GET /api/users",
+            "@response": {
+                "@body": "{{array global.userTemplate 10}}"
+            }
+        }
+    ]
+}

@@ -1,0 +1,12 @@
+{
+    "title": "Short structure",
+    "@endpoints": [
+        {
+            "@request": "GET /api/users/:id",
+            "@response": {
+                "id": "<<:id>>",
+                "title": "test :id"
+            }
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "title": "FULL structure",
+    "@endpoints": [
+        {
+            "@request": {
+                "@url": "GET /api/users/1"
+            },
+            "@response": {
+                "@body": {
+                    "id": 1,
+                    "title": "test 1"
+                }
+            }
+        }
+    ]
+}

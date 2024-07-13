@@ -1,0 +1,31 @@
+{
+    "title": "FULL structure",
+    "@endpoints": [
+        {
+            "@request": {
+                "@url": {
+                    "@url": "GET /api/users/:id"
+                },
+                "@headers": [
+                    {
+                        "content-type": "application/json"
+                    }
+                ]
+            },
+            "@response": {
+                "@status": 200,
+                "@headers": [
+                    {
+                        "content-type": "application/json"
+                    }
+                ],
+                "@body": {
+                    "@body": {
+                        "id": ":id",
+                        "title": "test :id"
+                    }
+                }
+            }
+        }
+    ]
+}

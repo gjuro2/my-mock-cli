@@ -1,0 +1,60 @@
+{
+    "title": "Sample mock API - parameters",
+    "@endpoints": [
+        {
+            "title": "#1 Response status code",
+            "request": "GET /api/users/1",
+            "response": {
+                "httpStatusCode": 400,
+                "body": {
+                    "error": "NO_DATA"
+                }
+            }
+        },
+        {
+            "title": "#2 Response content type",
+            "request": "GET /api/users/1",
+            "response": {
+                "body": "TEST HTML"
+            }
+        },
+        {
+            "title": "#3 File response",
+            "request": "GET /api/files/1",
+            "response": {
+                "body": "file:/samples/sample.pdf"
+            }
+        },
+        {
+            "title": "#3.1 File response from url",
+            "request": "GET /api/files/1",
+            "response": {
+                "headers": [
+                    { "Content-Type": "application/pdf" }
+                ],
+                "body": "https://pdfobject.com/pdf/sample.pdf"
+            }
+        },
+        {
+            "title": "#3.2 File response from base64",
+            "request": "GET /api/files/1",
+            "response": {
+                "headers": [
+                    { "Content-Type": "application/pdf" }
+                ],
+                "body": "data:image/png;base64,..."
+            }
+        },
+        {
+            "title": "#4 Multipart request",
+            "request": "POST /api/upload",
+            "response": {
+                "httpStatusCode": 400,
+                "headers": [
+                    { "Content-Type": "text/html" }
+                ],
+                "body": "TEST HTML"
+            }
+        }
+    ]
+}

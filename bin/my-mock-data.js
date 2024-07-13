@@ -1,27 +1,38 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MyPropMappings = exports.MyMockDataDefinition = exports.MyMockDataRow = void 0;
+exports.MyMock_EndpointRow_Response = exports.MyMock_EndpointRow_Request = exports.MyMock_EndpointRow = exports.MyPropMappings = exports.MyMock_DataDefinition = void 0;
 /**
- * DEfinition of 1 endpoint maping
+ * Main definition of MOCK structure
  */
-class MyMockDataRow {
-    constructor() {
-        // "title": "get list",
-        this.title = "";
-        //"request": "GET /api/users/1",
-        this.request = "";
-    }
+class MyMock_DataDefinition {
 }
-exports.MyMockDataRow = MyMockDataRow;
-/**
- * DEfinition of endpoint maping
- */
-class MyMockDataDefinition {
-}
-exports.MyMockDataDefinition = MyMockDataDefinition;
+exports.MyMock_DataDefinition = MyMock_DataDefinition;
 /**
  * mapping custom mock file structure to default
  */
 class MyPropMappings {
 }
 exports.MyPropMappings = MyPropMappings;
+/**
+ * DEfinition of 1 endpoint maping
+ */
+class MyMock_EndpointRow {
+    constructor() {
+        // "title": "get list",
+        this.title = "";
+    }
+}
+exports.MyMock_EndpointRow = MyMock_EndpointRow;
+/**
+ * Request
+ */
+class MyMock_EndpointRow_Request {
+}
+exports.MyMock_EndpointRow_Request = MyMock_EndpointRow_Request;
+/**
+ * Request
+ */
+class MyMock_EndpointRow_Response {
+}
+exports.MyMock_EndpointRow_Response = MyMock_EndpointRow_Response;
+//# sourceMappingURL=my-mock-data.js.map

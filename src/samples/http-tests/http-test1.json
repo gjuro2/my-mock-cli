@@ -1,0 +1,12 @@
+{
+    "title": "HTTP TEST #1 : http method lower case",
+    "@endpoints": [
+        {
+            "@request": "get /api/users/1",
+            "@response": {
+                "id": 1,
+                "title": "test 1"
+            }
+        }
+    ]
+}

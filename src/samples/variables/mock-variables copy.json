@@ -1,0 +1,64 @@
+{
+    "title": "Sample mock API - using variables",
+    "global": {
+        "number" : 100,
+        "decimal" : 100.2,
+        "string" : "test",
+        "user" : {"id": 1,"title": "test 1"},
+        "user2" : {"id": "{{global.number}}","title": "test 1"},
+        "user(id)" : {"id": "{{id}}","title": "test 1"}
+    },
+    "testNumber" : {
+        "number1Num" : "{{global.number}}",
+        "number1Str" : "{{TEXT(200)}}",
+        "number11Str" : "{{TEXT(global.number)}}",
+        "number2Str" : "{{TEXT(200,2)}}",
+        "number22Str" : "{{TEXT(global.number,2)}}",
+        "number3Str" : "user {{global.number}}"
+    },
+    "testDecimal" : {
+        "decimal1Num"  : "{{global.decimal}}",
+        "decimal1Str"  : "{{TEXT(200.555)}}",
+        "decimal11Str" : "{{TEXT(global.decimal)}}",
+        "decimal2Str"  : "{{TEXT(200.555,2)}}",
+        "decimal22Str" : "{{TEXT(global.decimal,2)}}",
+        "decimal3Str"  : "user {{global.decimal}}"
+    },
+    "testString" : {
+        "string1" : "{{TEXT(global.number)}}",
+        "string2" : "{{global.string}}"
+    },
+    "testObject" : {
+        "userId" : "{{global.user.id}}",
+        "user" : "{{global.user}}",
+        "user11" : "{{global.user(11)}}"
+    },
+    "random": {
+        "number" : "{{RND(0,100)}}",
+        "arrayNum" : "{{RND([1,2,3,4])}}",
+        "arrayStr" : "{{RND(['1','2','3','4'])}}"
+    },
+    "array": {
+        "arr1": [
+            "{{global.user(1)}}",
+            "{{global.user(2)}}",
+            "{{test.user11}}"
+        ],
+        "arr2": "{{ARR(global.user(idx),10)}}"
+    },
+    "@endpoints": [
+        {
+            "request": "GET /api/users/1",
+            "response": {
+                "body": "{{global.user(1)}}"
+            }
+        },
+        {
+            "title": "get list",
+            "request": "POST /api/users",
+            "response": {
+                "body": "array.arr1"
+            }
+        }
+    ]
+}

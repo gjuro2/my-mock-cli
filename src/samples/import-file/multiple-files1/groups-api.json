@@ -1,0 +1,32 @@
+{
+    "@endpoints": [
+        {
+            "request": "GET /api/groups/1",
+            "response": {
+                "body": {
+                    "id": 1,
+                    "title": "group1 1"
+                }
+            }
+        },
+        {
+            "request": "POST /api/groups",
+            "response": {
+                "body": [
+                    {
+                        "id": 1,
+                        "title": "group 1"
+                    },
+                    {
+                        "id": 2,
+                        "title": "group 2"
+                    },
+                    {
+                        "id": 3,
+                        "title": "group 3"
+                    }
+                ]
+            }
+        }
+    ]
+}

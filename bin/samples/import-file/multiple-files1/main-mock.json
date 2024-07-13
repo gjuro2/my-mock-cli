@@ -1,0 +1,7 @@
+{
+    "title": "Sample mock API",
+    "@endpoints": [
+        "{{file 'users-api.json'}}",
+        "{{file 'groups-api.json'}}"
+    ]
+}

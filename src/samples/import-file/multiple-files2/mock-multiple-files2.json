@@ -1,0 +1,18 @@
+{
+    "title": "Sample mock API",
+    "@endpoints": [
+        {
+            "request": "GET /api/users/1",
+            "response": {
+                "body": "file:///api-user-response.json"
+            }
+        },
+        {
+            "title": "get list",
+            "request": "POST /api/users",
+            "response": {
+                "body": "file:///api-users-response.json"
+            }
+        }
+    ]
+}

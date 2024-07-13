@@ -1,0 +1,6 @@
+{
+    "title": "Sample mock API include",
+    "@endpoints": [
+        "{{file 'klijent-api.json'}}"
+    ]
+}

@@ -1,0 +1,68 @@
+{
+    "title": "Sample mock API",
+    "global": {
+        "title": "Global variables",
+        "id": 198
+    },
+    "@endpoints": [
+        {
+            "request": "GET /api/users/1",
+            "response": {
+                "body": {
+                    "id": 1,
+                    "title": "test 1"
+                }
+            }
+        },
+        {
+            "title": "get list",
+            "request": "POST /api/users",
+            "response": {
+                "body": [
+                    {
+                        "id": 1,
+                        "title": "test 1"
+                    },
+                    {
+                        "id": 2,
+                        "title": "test 2"
+                    },
+                    {
+                        "id": 3,
+                        "title": "test 3"
+                    }
+                ]
+            }
+        },
+        {
+            "title": "get first matching endpoint any HTTP method ",
+            "request": "* /api/users/1",
+            "response": {
+                "body": {
+                    "id": "1",
+                    "title": "test 1"
+                }
+            }
+        },
+        {
+            "title": "get first mathing endpoint",
+            "request": "POST /api/*/1",
+            "response": {
+                "body": {
+                    "id": "1",
+                    "title": "test 1"
+                }
+            }
+        },
+        {
+            "title": "Example of using variables",
+            "request": "GET /api/users/2",
+            "response": {
+                "body": {
+                    "id": "{{object global.id}}",
+                    "title": "test global variable 1"
+                }
+            }
+        }
+    ]
+}

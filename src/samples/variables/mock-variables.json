@@ -1,0 +1,50 @@
+{
+    "title": "Sample mock API - using variables",
+    "global": {
+        "number" : 100,
+        "decimal" : 100.2,
+        "string" : "test",
+
+        "user" : {"id": 1,"title": "test 1"},
+        "user_id_str" : "{{global.user.id}}",
+        "user_id_num" : "<<{{global.user.id}}>>",
+        "user_title" : "{{global.user.title}}",
+
+        "user1" : {"id": "{{global.number}}","title": "test 1"},
+        "user2" : {"id": "<<{{global.number}}>>","title": "test 1"},
+
+        "user_1" : "{{object global.user}}",
+        "user1_1" : "{{object global.user1}}",
+        "user2_1" : "{{object global.user2}}",
+        "user3_1" : "{{object global.user_1}}",
+        "user5_1" : "{{object global.user2_1}}",
+
+        "user1Template" : {"id": "t1","title": "test 1"},
+        "users1": "{{array global.user1Template 2}}",
+        "users1_1": "{{object global.user1Template}}",
+
+        "user2Template" : {"id": "<<{{idx}}>>","title": "test {{idx}}"},
+        "users2": "{{array global.user2Template 2}}",
+        "users2_1": "{{object global.user2Template 999}}",
+
+        "user3Template" : {"id": "<<{{rnd 0 100}}>>","title": "test 1 - {{rnd}}"},
+        "users3": "{{array global.user3Template 2}}",
+        "users3_1": "{{object global.user3Template}}"
+    },
+
+    "test": {
+        "number" : "<<{{global.number}}>>",
+        "decimal" : "<<{{global.decimal}}>>",
+        "string" : "{{global.string}}"
+    },
+    "array": {
+        "array1" : "{{object global.users1}}",
+        "array2" : "{{object global.users2}}",
+        "array3" : "{{object global.users3}}"
+    },
+    "object": {
+        "object1" : "{{object global.users1_1}}",
+        "object2" : "{{object global.users2_1}}",
+        "object3" : "{{object global.users3_1}}"
+    }
+}
