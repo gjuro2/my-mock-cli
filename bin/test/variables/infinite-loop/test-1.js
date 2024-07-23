@@ -4,7 +4,7 @@ const my_json_template_helper_1 = require("../../../my-json-template-helper");
 const my_test_helper_1 = require("../../fw/my-test-helper");
 test('VARIABLE #1 : INFINITE LOOP', () => {
     let testHelper = new my_test_helper_1.MyTestHelper("src/test/variables/infinite-loop");
-    let tJsonString = testHelper.getTestFile("variable-infinite-loop");
+    let tJsonString = testHelper.getTestFile("test-1");
     // MyJsonTemplateHelper.displayParsingSteps = true;
     try {
         let tRez = my_json_template_helper_1.MyJsonTemplateHelper.parseAsObj(tJsonString, testHelper.workDir);
@@ -14,4 +14,4 @@ test('VARIABLE #1 : INFINITE LOOP', () => {
         expect("OK").toBe("OK");
     }
 });
-//# sourceMappingURL=variable-infinite-loop.test.js.map
+//# sourceMappingURL=test-1.js.map

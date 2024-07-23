@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const my_http_helper_1 = require("../my-http-helper");
-const my_mock_request_1 = require("./fw/my-mock-request");
-const my_mock_response_1 = require("./fw/my-mock-response");
-const my_test_helper_1 = require("./fw/my-test-helper");
+const my_http_helper_1 = require("../../my-http-helper");
+const my_mock_request_1 = require("../fw/my-mock-request");
+const my_mock_response_1 = require("../fw/my-mock-response");
+const my_test_helper_1 = require("../fw/my-test-helper");
 // MyJsonTemplateHelper.displayParsingSteps = true;
 test('TEST #1 : http method lower case', () => {
     let httpServer = new my_http_helper_1.MyHttpHelper();

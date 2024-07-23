@@ -12,19 +12,7 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}/bin/index.js",
-            "args": ["--verbose", "/home/dev/xoffice/test-app-ng/mock.json"],
-            "outFiles": [
-                "${workspaceFolder}/**/*.js"
-            ]
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "DEBUG EXPRESS-MIX",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}/bin/express-mix.js",
+            "args": ["--verbose", "/home/dev/xoffice/my-mock-cli/ipo-mock.json"],
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ]

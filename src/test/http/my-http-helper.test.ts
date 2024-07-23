@@ -1,7 +1,7 @@
-import { MyHttpHelper } from '../my-http-helper';
-import { MyMockRequest } from './fw/my-mock-request';
-import { MyMockResponse } from './fw/my-mock-response';
-import { MyTestHelper } from './fw/my-test-helper';
+import { MyHttpHelper } from '../../my-http-helper';
+import { MyMockRequest } from '../fw/my-mock-request';
+import { MyMockResponse } from '../fw/my-mock-response';
+import { MyTestHelper } from '../fw/my-test-helper';
 // MyJsonTemplateHelper.displayParsingSteps = true;
 
 test('TEST #1 : http method lower case', () => {

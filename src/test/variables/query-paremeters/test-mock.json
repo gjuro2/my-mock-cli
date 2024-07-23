@@ -1,5 +1,5 @@
 {
-    "title": "VARIABLE #1 : QUERY PARAM",
+    "title": "VARIABLE:QUERY-PARAM",
     "global": {
         "userTemplate": {
             "id": "<<:id>>",
@@ -21,13 +21,13 @@
             "@request": "GET /api/klijents?id=2&name=test",
             "@response": {
                 "@body": {
-                    "data": "{{object global.userTemplate}}"
+                    "data": "url paremeters static :id :name"
                 }
             }
         },
         {
             "title": "url paremeters mixed",
-            "@request": "GET /api/klijents2?id=:2&name=test",
+            "@request": "GET /api/klijents2?id=:id&name=test",
             "@response": {
                 "@body": {
                     "data": "{{object global.userTemplate}}"
@@ -45,7 +45,7 @@
         },
         {
             "title": "no url paremeters",
-            "@request": "GET /api/klijents5",
+            "@request": "GET /api/klijents/5",
             "@response": {
                 "@body": {
                     "data": "{{object global.userTemplate}}"

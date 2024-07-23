@@ -7,7 +7,7 @@ import { MyTestHelper } from "../../fw/my-test-helper";
 test('VARIABLE #1 : INFINITE LOOP', () => {
 
   let testHelper = new MyTestHelper("src/test/variables/infinite-loop")
-  let tJsonString = testHelper.getTestFile("variable-infinite-loop")
+  let tJsonString = testHelper.getTestFile("test-1")
   // MyJsonTemplateHelper.displayParsingSteps = true;
   try {
   let tRez = MyJsonTemplateHelper.parseAsObj(tJsonString, testHelper.workDir)

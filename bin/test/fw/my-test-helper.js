@@ -34,8 +34,11 @@ class MyTestHelper {
     }
     /**
      * Učitaj result file i formatiraj ga
+     * ako se ne navede onda se koristi isto ime kao i test file
      */
-    getExpectedFile() {
+    getExpectedFile(file = null) {
+        if (file)
+            this.testFile = file;
         let tExpectedJsonString = fs_1.default.readFileSync(this.workDir + "/" + this.testFile + "-expected.json", "utf8");
         if (!tExpectedJsonString)
             return null;

@@ -196,6 +196,11 @@ class MyJsonTemplateHelper {
     static getEndpoint(pElement, idx) {
         if (!pElement)
             return null;
+        //FIX za include file
+        if (my_object_1.MyObject.isString(pElement)) {
+            if (pElement.indexOf("{{file") != -1)
+                return pElement;
+        }
         let tEndpoint = {
             "@request": null,
             "@response": null

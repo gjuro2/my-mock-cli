@@ -11,6 +11,8 @@ const path_1 = __importDefault(require("path"));
 const my_object_1 = require("./my-object");
 const version_1 = require("./version");
 const my_json_template_helper_1 = require("./my-json-template-helper");
+const querystring = require('querystring');
+const { URL } = require('url');
 class MyHttpHelper {
     constructor() {
         this.isUnitTest = false; //Flag da smo u unit testu i onda ne parsamo CMD parametre
@@ -137,7 +139,7 @@ class MyHttpHelper {
      * Obradi ulazni request
      */
     processRequest(request, response) {
-        var _a, _b;
+        var _a, _b, _c;
         // console.dir(request.params);
         //logLine.white(request)
         //http://localhost:3000/test
@@ -161,9 +163,9 @@ class MyHttpHelper {
         //Preskoci favicon ***************************************
         let tMatchedItem;
         //AKo treba uzmi mapiranje requesta
-        let tReqMapping = my_object_1.MyObject.get(this.mockData, "@propMappings.@request");
-        if (!tReqMapping)
-            tReqMapping = "@request";
+        let reqMapping = my_object_1.MyObject.get(this.mockData, "@propMappings.@request");
+        if (!reqMapping)
+            reqMapping = "@request";
         //AKo treba uzmi mapiranje response
         let tRespMapping = my_object_1.MyObject.get(this.mockData, "@propMappings.@response");
         if (!tRespMapping)
@@ -175,48 +177,30 @@ class MyHttpHelper {
             response.end('{ message: "ROOT"}');
             return;
         }
+        let tRequestUrl = request.url;
+        //Finta da dobijemo dobar URL jer iz nekog razloga metode na requestu ne vraćaju sve propove nego za neke null
+        const tReqCustomUrlObj = new URL("http://localhost:" + this.port + tRequestUrl);
+        //! ako imamo query parametre onda probaj po njima naći duirect match
+        //! znaći da svi parametri odgovoraju
+        if (tReqCustomUrlObj.search) {
+            //Url uvijek gledamo bez paramatara
+            //!prvo probaj naći rutu koja ima točno query parametre ako takova ne psotoji onda idemo u normalan matching
+            (_b = my_object_1.MyObject.get(this.mockData, "@endpoints")) === null || _b === void 0 ? void 0 : _b.some((mockRow) => {
+                tMatchedItem = this.matchRequest(mockRow, reqMapping, tRequestUrl, request, response, "MATCH_URL_PARAMS");
+                if (tMatchedItem)
+                    return true;
+            });
+        }
         //! MATCH REQUEST DINAMICALY *************************+
-        (_b = my_object_1.MyObject.get(this.mockData, "@endpoints")) === null || _b === void 0 ? void 0 : _b.some((element) => {
-            var _a, _b;
-            //Razbij podatke na method i url
-            let tRequestObj = my_object_1.MyObject.get(element, tReqMapping);
-            if (!tRequestObj)
-                return;
-            let tRequestUrl = my_object_1.MyObject.get(tRequestObj, "@url");
-            if (!tRequestUrl)
-                return;
-            let tParts = tRequestUrl.split(" ");
-            if (!tParts)
-                return;
-            const tMethod = (_a = tParts[0]) === null || _a === void 0 ? void 0 : _a.toUpperCase();
-            const tUrl = tParts[1];
-            //Da li je ok metoda GET | POST | PUT | DELETE | * - bilokoja
-            // logLine.white('check METHOD:' + tMethod);
-            if ((!tMethod.startsWith("" + request.method)) &&
-                (!tMethod.startsWith("*")))
-                return false;
-            //MATCH PO PARAMETRIMA U RUTI
-            tMatchedItem = this.matchRoute(tUrl, request, response, element);
-            if (tMatchedItem) {
-                return true;
-            }
-            //Da li je ok url
-            // logLine.white('check URL:' + tUrl);
-            if (tUrl.indexOf("*") !== -1) {
-                //*REGEX
-                const tRegex = tUrl.replaceAll("*", ".*");
-                if (!((_b = request.url) === null || _b === void 0 ? void 0 : _b.match(tRegex + "$")))
-                    return false;
-            }
-            else {
-                //* NORMALAN
-                // if (!request.url?.startsWith(tUrl)) return false;
-                if (request.url !== tUrl)
-                    return false;
-            }
-            tMatchedItem = element;
-            return true;
-        });
+        if (!tMatchedItem) {
+            //ako nemamo direktan match makni query parametre i idemo dolje u dinamički match
+            tRequestUrl = tReqCustomUrlObj.pathname;
+            (_c = my_object_1.MyObject.get(this.mockData, "@endpoints")) === null || _c === void 0 ? void 0 : _c.some((mockRow) => {
+                tMatchedItem = this.matchRequest(mockRow, reqMapping, tRequestUrl, request, response, "MATCH_ROUTE");
+                if (tMatchedItem)
+                    return true;
+            });
+        }
         if (tMatchedItem == null) {
             my_color_loging_1.logLine.red(' 404 NOK');
             response.writeHead(404, { 'Content-Type': 'application/json' });
@@ -255,34 +239,161 @@ class MyHttpHelper {
         my_color_loging_1.logLine.green(" 200 OK");
         my_color_loging_1.logLine.green("response: " + tResponseStr);
         // if (!tMatchedItem.title) {
-        //     logLine.white('# Matched:' + getObjectValue(tMatchedItem,tReqMapping));
+        //     logLine.white('# Matched:' + getObjectValue(tMatchedItem,reqMapping));
         // } else {
         //     logLine.white('# Matched:' + tMatchedItem.title);
-        //     logLine.white('  request:' + getObjectValue(tMatchedItem,tReqMapping));
+        //     logLine.white('  request:' + getObjectValue(tMatchedItem,reqMapping));
         // }
         //U suprotnom vrati response
         response.writeHead(200, { 'Content-Type': 'application/json' });
         response.end(tResponseStr);
     }
+    //Matchaj request
+    matchRequest(mockRow, reqMapping, requestUrl, request, response, matchStrategy //MATCH_URL_PARAMS matchamo i path i query parametre | MATCH_ROUTE matchamo samo po pathu
+    ) {
+        var _a;
+        //Razbij podatke na method i url
+        let tMockRequestObj = my_object_1.MyObject.get(mockRow, reqMapping);
+        if (!tMockRequestObj)
+            return null;
+        let tMockRequestUrl = my_object_1.MyObject.get(tMockRequestObj, "@url");
+        if (!tMockRequestUrl)
+            return null;
+        let tParts = tMockRequestUrl.split(" ");
+        if (!tParts)
+            return null;
+        const tMockMethod = (_a = tParts[0]) === null || _a === void 0 ? void 0 : _a.toUpperCase();
+        let tMockUrl = tParts[1];
+        //Da li je ok metoda GET | POST | PUT | DELETE | * - bilokoja
+        // logLine.white('check METHOD:' + tMockMethod);
+        if ((!tMockMethod.startsWith("" + request.method)) &&
+            (!tMockMethod.startsWith("*")))
+            return null;
+        let tMatchedItem = null;
+        //ako imamo url parametre onda ih rasparsaj
+        let tUrlParams = [];
+        //Uzmi prave parametre i iz originalnog requesta
+        this.getUrlParameters(request.url, tUrlParams);
+        // this.getUrlParameters(tMockUrl, tUrlParams)
+        if (matchStrategy !== "MATCH_URL_PARAMS") {
+            //MATCH PO PARAMETRIMA U RUTI
+            let tMatchedItem = this.matchRoute(requestUrl, tMockUrl, mockRow);
+            if (tMatchedItem) {
+                //Dodaj url parametre u matched item
+                this.addUrlParameters(tMatchedItem, tUrlParams);
+                return tMatchedItem;
+            }
+            //Izbaci url paremetre ako smo u ovom koraku
+            const parsedUrl = new URL("http://localhost:" + this.port + tMockUrl);
+            tMockUrl = parsedUrl.pathname;
+        }
+        //Da li je ok url
+        // logLine.white('check URL:' + tUrl);
+        if (tMockUrl.indexOf("*") !== -1) {
+            //*REGEX
+            const tRegex = tMockUrl.replaceAll("*", ".*");
+            if (!(requestUrl === null || requestUrl === void 0 ? void 0 : requestUrl.match(tRegex + "$")))
+                return null;
+        }
+        else {
+            //* NORMALAN
+            // if (!tRequestUrl?.startsWith(tUrl)) return false;
+            if (requestUrl !== tMockUrl)
+                return null;
+        }
+        tMatchedItem = mockRow;
+        this.addUrlParameters(tMatchedItem, tUrlParams);
+        return tMatchedItem;
+    }
+    //Dodaj url parametre u item
+    //ili ih spoji sa path parametrima ako već psotoje
+    addUrlParameters(matchedItem, urlParams) {
+        if (!urlParams)
+            return;
+        if (!urlParams.length)
+            return;
+        if (!matchedItem)
+            return;
+        //AKo nemamo request param onda samo naljepi
+        if (!matchedItem.requestData) {
+            matchedItem.requestData = urlParams;
+            return;
+        }
+        //inače pospoji
+        matchedItem.requestData = [...matchedItem.requestData, ...urlParams];
+    }
+    //Izvadi url parametre i vrati čisti url
+    getUrlParameters(pUrl, pUrlParam) {
+        if (pUrl.indexOf("?") === -1)
+            return;
+        //! ovo je finta da imamo dobar URL
+        const parsedUrl = new URL("http://localhost:" + this.port + pUrl);
+        let tParams = parsedUrl.searchParams;
+        //Obradi parametre
+        if (tParams) {
+            for (var entry of tParams.entries()) {
+                let tItem = { key: entry[0], value: entry[1] };
+                pUrlParam.push(tItem);
+            }
+        }
+    }
+    //Izvadi url parametre i vrati čisti url
+    getUrlParameters_OLD(pUrl, pUrlParam) {
+        if (pUrl.indexOf("?") === -1)
+            return pUrl;
+        let tNewUrl = pUrl;
+        //#1 sad uzmi url parametre iz requesta
+        // const url = "https://u:p@www.example.com:777/a/b?c=d&e=f#g";
+        // const parsedUrl = new URL(url);
+        //href         https://u:p@www.example.com:777/a/b?c=d&e=f#g
+        //origin       https://www.example.com:777
+        //protocol     https:
+        //username     u
+        //password     p
+        //host         www.example.com:777
+        //hostname     www.example.com
+        //port         777
+        //pathname     /a/b
+        //search       ?c=d&e=f
+        //searchParams { 'c' => 'd', 'e' => 'f' }
+        //hash         #g
+        //! ovo je finta da imamo dobar URL
+        const parsedUrl = new URL("http://localhost:" + this.port + tNewUrl);
+        tNewUrl = parsedUrl.pathname;
+        let tParams = parsedUrl.searchParams;
+        //Obradi parametre
+        if (tParams) {
+            for (var entry of tParams.entries()) {
+                let tItem = { key: entry[0], value: entry[1] };
+                pUrlParam.push(tItem);
+            }
+        }
+        //#2 Vrati samo url bez query string
+        return tNewUrl;
+    }
     /**
      * Ako u ruti imamo varijable onda probaj matchati routu
      */
-    matchRoute(tUrl, request, response, element) {
-        if (!tUrl)
+    matchRoute(requestUrl, mockUrl, mockRow) {
+        if (!mockUrl)
             return null;
-        if (!request.url)
+        if (!requestUrl)
             return null;
-        if (tUrl.indexOf("/:") === -1)
+        let tReqData = null; //ovo je  array objekata { key:'test' value: 1 }
+        //Izbaci url paremetre
+        const parsedUrl = new URL("http://localhost:" + this.port + mockUrl);
+        let tMockUrl = parsedUrl.pathname;
+        //ovako izgledaju route parametri
+        if (tMockUrl.indexOf("/:") === -1)
             return null;
         //Uzmi djelove urla i matchaj
-        var url2MatchParts = tUrl.split("/"); //npr: /user/:id
+        var url2MatchParts = tMockUrl.split("/"); //npr: /user/:id
         if (url2MatchParts.length == 0)
             return null;
-        var urlParts = request.url.split("/"); //npr: /user/1
+        var urlParts = requestUrl.split("/"); //npr: /user/1
         if (url2MatchParts.length != urlParts.length)
             return null;
         let urlMatched = true;
-        let tReqData = null; //ovo je  array objekata { key:'test' value: 1 }
         //sad provjeri sve partove
         for (let index = 0; index < url2MatchParts.length; index++) {
             const part2Match = url2MatchParts[index];
@@ -290,9 +401,8 @@ class MyHttpHelper {
             //Varijable
             if (part2Match.indexOf(":") !== -1) {
                 let tPropName = part2Match.replaceAll(":", "");
-                if (!tReqData) {
+                if (!tReqData)
                     tReqData = [];
-                }
                 let tItem = { key: tPropName, value: part };
                 tReqData.push(tItem);
             }
@@ -305,8 +415,8 @@ class MyHttpHelper {
             }
         }
         if (urlMatched) {
-            element.requestData = tReqData; //Stavi varijable u element
-            return element;
+            mockRow.requestData = tReqData; //Stavi varijable u element
+            return mockRow;
         }
         return null;
     }

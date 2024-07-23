@@ -1,0 +1,31 @@
+{
+    "title": "VARIABLE #1 : INFINITE LOOP",
+    "global": {
+        "userTemplate": {
+            "id": "<<{{idx}}>>",
+            "name": "User {{idx}}",
+            "prop1": "{{id}}",
+            "prop2": "{{id}}",
+            "prop3": "{{id}}"
+        }
+    },
+    "@endpoints": [
+        {
+            "title": "User list",
+            "@request": "GET /api/klijents/:id",
+            "@response": {
+                "@body": {
+                        "data": "{{object global.userTemplate ':id'}}"
+                }
+            }
+        },
+        {
+            "@request": "GET /api/klijents",
+            "@response": {
+                "@body": {
+                    "data": "{{array global.userTemplate 10}}"
+            }
+            }
+        }
+    ]
+}

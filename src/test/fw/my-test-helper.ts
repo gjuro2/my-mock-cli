@@ -35,8 +35,10 @@ public getTestFilePath(pFile: string) {
 
 /**
  * Učitaj result file i formatiraj ga
+ * ako se ne navede onda se koristi isto ime kao i test file
  */
-public getExpectedFile() {
+public getExpectedFile(file: string | null = null ) {
+  if (file) this.testFile = file;
   let tExpectedJsonString = fs.readFileSync(this.workDir+"/"+this.testFile+"-expected.json", "utf8");
   if (!tExpectedJsonString) return null;
   tExpectedJsonString = JSON.stringify(JSON.parse(tExpectedJsonString),null, 4);
